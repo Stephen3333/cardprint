@@ -1,0 +1,165 @@
+<div class="page-signin">
+
+	<div class="signin-header">
+		<div class="container text-center">
+			<section class="logo">
+			
+				<div style="width: 100%; text-align: center; height: 100px">
+					<img alt="" src="images/I&M2b.png"
+						style="margin-top: -45px">
+					
+				</div>
+				
+			</section>
+		</div>
+		
+	</div>
+	<div class="signin-body" style="padding-top: 0;">
+		<div class="container">
+			<div class="form-container">
+				<div style="height: 250px">
+
+					<!--Login Form-->
+					<form class="form-horizontal formFadeIn"
+						ng-hide="tgBio == true || resetPass == true ||brSelectMode==true || showForgotpasswordLink ==true"
+						ng-submit="Login()">
+						<div style="width: 100%; text-align: center;">
+						<span class="line-thru"
+							style="font-size: 18px; font-weight: bold; color:#006195 ;margin-top: 60px">Login
+							</span>
+						</div>
+						<fieldset>
+							<div class="form-group">
+								<div class="input-group input-group-lg" show-errors>
+									<span class="input-group-addon"> <span
+										class="glyphicon glyphicon-user"></span>
+									</span> <input type="text" class="form-control" placeholder="UserName"
+										ng-model="UserName" required="required" name="userName">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group input-group-lg" show-errors>
+									<span class="input-group-addon"> <span
+										class="glyphicon glyphicon-lock"></span>
+									</span> <input type="password" class="form-control"
+										placeholder="Password" ng-model="Password" required="required"
+										name="password">
+								</div>
+							</div>
+							<div class="form-group"></div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-lg btn-block">Log
+									in</button>
+								<!--<button type="button" class="btn btn-primary btn-lg btn-block"	ng-click="Login(UserName,Password)">Log in</button>-->
+							</div>
+						</fieldset>
+					</form>
+
+					<!--End Login Form-->
+					<form class="form-horizontal formFadeIn"
+						ng-hide="showForgotpasswordLink!=true">
+						<div style="width: 100%; text-align: center;">
+							<span class="line-thru"
+							style="font-size: 18px; font-weight: bold; color:#006195 ;margin-top: 60px">Enter User Name
+							</span>
+						</div>
+						<fieldset>
+							<div class="form-group">
+								<div class="input-group input-group-lg" show-errors>
+									<span class="input-group-addon"> <span
+										class="glyphicon glyphicon-user"></span>
+									</span> <input type="text" class="form-control" placeholder="UserName"
+										ng-model="UserName" required="required" name="userName">
+								</div>
+							</div>
+
+							<div class="form-group"></div>
+							<div class="form-group">
+								<button type="button" class="btn btn-primary btn-lg btn-block"
+									ng-click="forgotPassword(UserName)">Proceed</button>
+
+							</div>
+						</fieldset>
+					</form>
+					<!--Reset Password Form-->
+					<form class="form-horizontal formFadeIn" ng-hide="resetPass !=true"
+						ng-submit="resetPassword()">
+						<div style="width: 100%; text-align: center;">
+							<span class="line-thru"
+							style="font-size: 18px; font-weight: bold; color:#006195 ;margin-top: 60px">Reset Password
+							</span>
+						</div>
+						<fieldset>
+							<div class="form-group">
+								<div class="input-group input-group-lg" show-errors>
+									<span class="input-group-addon"> <span
+										class="glyphicon glyphicon-lock"></span>
+									</span> <input type="password" class="form-control"
+										placeholder="password" ng-model="password" required="required"
+										name="New password">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="input-group input-group-lg" show-errors>
+									<span class="input-group-addon"> <span
+										class="glyphicon glyphicon-lock"></span>
+									</span> <input type="password" class="form-control"
+										placeholder="confirm password" ng-model="cpassword"
+										required="required" name="cpassword">
+								</div>
+							</div>
+
+							<div class="form-group"></div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-success btn-lg btn-block">Reset</button>
+								<!--<button type="button" class="btn btn-primary btn-lg btn-block"	ng-click="Login(UserName,Password)">Log in</button>-->
+							</div>
+						</fieldset>
+					</form>
+					<!--End Reset Password Form-->
+					<!--Select Password->
+
+                    <!--->
+					<section>
+						<p class="text-center" >
+
+							<a href="javascript:;" ng-click="showForgotpassword()" ng-show="showLoginLink==true;">Forgot
+								your password?</a> <a href="javascript:;"
+								ng-click="showLogin()" ng-show="showLoginLink==false">Login</a>
+
+						</p>
+					</section>
+
+
+					<!--Br Select Form-->
+					<form class="form-horizontal formFadeIn"
+						ng-hide="brSelectMode !=true" ng-submit="setUserBranch()">
+						<div style="width: 100%; text-align: center;">
+							<h3 style="margin-top: 0;">Select Branch</h3>
+						</div>
+						<fieldset>
+							<div class="form-group">
+
+								<div class="col-sm-10">
+									<select style="width: 100%" ui-select2=""
+										ng-model="branchSelect" id="branchSelect">
+										<option data-ng-repeat="branch in branches"
+											ng-selected="{{branch.id}}" value="{{branch.id}}">{{branch.branchName}}</option>
+										</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group"></div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-success btn-lg btn-block">Proceed</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,106 @@
+<div class="page" ng-controller="cardprintCtrl">
+      <form class="form-horizontal formFadeIn" role="form" name="cardprintForm" novalidate >
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th input-sm"></span>
+                    CardPrint Creation</strong>
+            </div>
+            <div class="panel-body">
+                  
+                               
+                <div class="form-group" >
+                    <label for="accountName" class="col-sm-2 control-label input-sm">Account Name</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="accountName" 
+                               placeholder="Account Name" ng-model="accountName" maxlength="25" required >
+
+                    </div>
+                </div>
+
+
+                <div class="form-group" >
+                    <!--for= "accountNumber"-->
+                    <label for="accountName" class="col-sm-2 control-label input-sm">Account Number</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="accountNumber" 
+                               placeholder="Account Number" ng-model="accountNumber" maxlength="25" required >
+
+                    </div>
+                </div>
+
+                              
+                <!-- <div class="form-group">
+                    <label for="branchSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Branch <span style="color:red;">*</span></label>
+
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="branchSelect"
+                                id="branchSelect" >
+                            <option data-ng-repeat="branch in branches"
+                                    ng-selected="{{branch.branchId}}" value="{{branch.branchId}}">{{branch.branchName}}</option>
+                        </select>
+                    </div>
+                 </div> -->
+                
+                <div class="form-group" >
+                    <label for="cardtypeSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Card Format <span style="color:red;">*</span></label>
+
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="cardtypeSelect" 
+                                id="cardtypeSelect" >
+                            <option data-ng-repeat="cardtype in cardtypes"
+                                    ng-selected="{{cardtype.id}}" value="{{cardtype.id}}">{{cardtype.name}}</option>
+                        </select>
+                    </div>
+                 </div>
+                 <div class="form-group" >
+                    <label for="printertypeSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Printer Type <span style="color:red;">*</span></label>
+
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="printertypeSelect" 
+                                id="printertypeSelect" >
+                            <option data-ng-repeat="printertype in printertypes"
+                                    ng-selected="{{printertype.id}}" value="{{printertype.id}}">{{printertype.printerName}}</option>
+                        </select>
+                    </div>
+                 </div>
+              <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success input-sm" ng-disabled="cardprintForm.$invalid"
+                                style="width: 100px" ng-click="printCard()" >
+                            <span class="glyphicon glyphicon-ok"> Print</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelJob()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+	 <!-- <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success input-sm"
+                                style="width: 100px" ng-click="printCard()" >
+                            <span class="glyphicon glyphicon-ok"> Print</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelJob()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+                    </div>
+                </div> -->
+
+<!--     <object type="application/x-java-applet" width="0" height="0"
+            id="printId" name="printId">
+        <param name="code" value="com.compulynx.iprint.PrintCardTransactions"/>
+        <param name="archive" value="applet/IMiPrint-0.0.4-SNAPSHOT.jar"/>
+        <param name="java_version" value="1.5+">
+    </object> -->
+
+    </div>

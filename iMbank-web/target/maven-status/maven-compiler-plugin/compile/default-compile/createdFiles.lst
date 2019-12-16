@@ -1,0 +1,11 @@
+com\compulynx\iMbank\web\svc\CurrentBalanceSvc.class
+com\compulynx\iMbank\web\svc\LoginSvc.class
+com\compulynx\iMbank\web\svc\BranchSvc.class
+com\compulynx\iMbank\web\svc\UserGroupSvc.class
+com\compulynx\iMbank\web\svc\CardTypeSvc.class
+com\compulynx\iMbank\web\svc\DashBoardSvc.class
+com\compulynx\iMbank\web\svc\CardPrintSvc.class
+com\compulynx\iMbank\web\svc\CardInventorySvc.class
+com\compulynx\iMbank\web\servlets\ReportsServlet.class
+com\compulynx\iMbank\web\svc\EmailConfigSvc.class
+com\compulynx\iMbank\web\svc\UserSvc.class

@@ -1,0 +1,200 @@
+<div class="page" ng-controller="cardtypeCtrl">
+    <form role="form" class="formFadeIn"
+          ng-hide="cardtypeEditMode == true || cardtypeViewMode == true ">
+        <section class="panel panel-default table-dynamic">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> Card Type List</strong>
+                <button type="button" class="btn btn-primary pull-right"
+                        tooltip-placement="left" tooltip="Add New Card Type"
+                        style="margin-top: -3px; height: 25px; margin-right: -8px; width: 60px"
+                        ng-click="addCardType()">
+                    <span class="glyphicon glyphicon-plus" style="top: -2px"></span>
+                </button>
+            </div>
+
+            <div class="table-filters">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <form>
+                            <input type="text" placeholder="search"
+                                   class="form-control input-sm" data-ng-model="searchKeywords"
+                                   data-ng-keyup="search()">
+                        </form>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 filter-result-info input-sm">
+						<!--<span> Showing {{filteredCardType.length}}/{{CardType.length}}-->
+							<!--entries </span>-->
+                    </div>
+                </div>
+            </div>
+
+            <table
+                    class="table table-bordered table-striped table-responsive input-sm">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="th">
+                            Id# <span class="glyphicon glyphicon-chevron-up"
+                                    data-ng-click=" order('id') "
+                                    data-ng-class="{active: row == 'id'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-id') "
+                                data-ng-class="{active: row == '-id'}"></span>
+                        </div>
+                    </th>
+                   
+                    <th>
+                        <div class="th">
+                            Code <span class="glyphicon glyphicon-chevron-up"
+                                               data-ng-click=" order('code') "
+                                               data-ng-class="{active: row == 'code'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-code') "
+                                data-ng-class="{active: row == '-code'}"></span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th">
+                            Name<span class="glyphicon glyphicon-chevron-up"
+                                              data-ng-click=" order('name') "
+                                              data-ng-class="{active: row == 'name'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-name') "
+                                data-ng-class="{active: row == '-name'}"></span>
+                        </div>
+                    </th>
+                    
+                    <th style="width: 60px"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="cardtype in currentPageCardType">
+                    <!-- <td>{{$index}}</td> -->
+                    <td>{{cardtype.counter}}</td> 
+                    <td>{{cardtype.code}}</td>
+                    <td>{{cardtype.name}}</td>
+                    <td style="padding: 1px;">
+                        <button type="button" class="btn btn-success"
+                                style="height: 25px; width: 60px;" tooltip-placement="top"
+                                tooltip="Modify {{cardtype.name}}" ng-click="editCardType(cardtype)">
+                            <span class="glyphicon glyphicon-pencil" style="top: -2px;"></span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <footer class="table-footer input-sm">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+						<span> Show <select data-ng-model="numPerPage"
+                                            data-ng-options="num for num in numPerPageOpt"
+                                            data-ng-change="onNumPerPageChange()"></select> entries per page
+						</span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm" page="currentPage"
+                                    total-items="filteredCardType.length" max-size="4"
+                                    on-select-page="select(page)" items-per-page="numPerPage"
+                                    rotate="false" boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </form>
+    <form  class="form-horizontal formFadeIn" role="form" name="cardtypeForm" novalidate ng-hide="cardtypeEditMode == false">
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> CardType Creation</strong>
+            </div>
+            <div class="panel-body">
+            
+                <div class="form-group">
+                    <label for="code" class="col-sm-2 control-label input-sm">Code
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="code"
+                               placeholder="code" ng-model="code" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label input-sm">Name</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="name"
+                               placeholder="Name" ng-model="name" required maxlength="100" >
+                    </div>
+                    </div>
+                
+                <div class="form-group">
+                    <label for="description" class="col-sm-2 control-label input-sm">Description
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="description"
+                               placeholder="description" ng-model="description" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="xCoordinates" class="col-sm-2 control-label input-sm">XCoordinates
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="xCoordinates"
+                               placeholder="xCoordinates" ng-model="xCoordinates" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="yCoordinates" class="col-sm-2 control-label input-sm">YCoordinates
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="yCoordinates"
+                               placeholder="yCoordinates" ng-model="yCoordinates" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fontname" class="col-sm-2 control-label input-sm">FontName
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="fontname"
+                               placeholder="fontname" ng-model="fontname" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fontsize" class="col-sm-2 control-label input-sm">FontSize
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="fontsize"
+                               placeholder="fontsize" ng-model="fontsize" required maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fontcolor" class="col-sm-2 control-label input-sm">FontColor
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control input-sm" id="fontcolor"
+                               placeholder="fontcolor" ng-model="fontcolor" maxlength="3" min="0" max="999">
+                    </div>
+                </div>
+  </div>
+            <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success input-sm" ng-disabled="cardtypeForm.$invalid"
+                                style="width: 100px" ng-click="saveCardType()">
+                            <span class="glyphicon glyphicon-ok"> Save</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelCardType()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>

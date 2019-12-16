@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+		<script>
+			$(window).load(function() {
+				var obj = $("#camId")[0].OnFindCams();
+				var res = jQuery.parseJSON(obj);
+				if(res.code == 200)
+				{
+					str = res.names.split(";");
+					$("#cams").empty();
+					for(i =0;i<(str.length-1);i= i+1){
+						$("#cams").append('<option value='+i+'>'+str[i]+'</option>');
+					}
+				}
+				else
+				{
+					alert('No Attached Cameras Detected');
+				}
+				
+			});
+			
+			$(function(){
+				$('#camLoad').on('click',function(e){
+					var imgObj = $("#camId")[0].OnCapture();
+					var res = jQuery.parseJSON(imgObj);
+					console.log(res);
+					if(res.code == 200)
+					{
+						var src = "data:image/png;base64,";
+                        src = src + res.image;
+                        $('.imgPic').removeAttr('src');
+                        $('.imgPic').attr('src',src).attr('style','border-radius:20px;');
+					}
+				});
+				
+				$('#showCam').on('click',function(e){
+					console.log($("#cams").val());
+					var start = $("#camId")[0].OnLoadCam($("#cams").val());
+					console.log(start);
+				});
+				
+			});
+
+		</script>
+	</head>
+	<body>
+		Sample Applet to Capture Test
+		
+		 <applet name="camId" id="camId" codebase="." archive="camera-0.1.4-SNAPSHOT.jar" code="org.compulynx.webcam.snap.SnapApplet.class" width="320" height="240" alt="Webcam Capture Applet">
+                <param name="separate_jvm" value="true" />
+        </applet>
+		<select id="cams"></select>
+		<button id="showCam">
+			Show Cam
+		</button>
+		<button id="camLoad">
+			Capture Pic
+		</button>
+		<img src='noimage.png' class="imgPic" style="width: 300px;height: 280px;" >
+	</body>
+</html>

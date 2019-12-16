@@ -1,0 +1,348 @@
+<div class="page" ng-controller="usersCtrl">
+    <form class="formFadeIn" role="form" ng-hide="classSelectMode==true">
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> User </strong>
+            </div>
+            <div class="panel-body">
+                <div class="form-inline col-sm-12 noPadding">
+                    <div class="form-group col-sm-6 noPadding"
+                         style="padding-right: 1px">
+                        <label for="classSelect" class="col-sm-3 control-label input-sm"
+                               style="text-align: right;">Select Category</label>
+                        <div class="col-sm-9 noPadding">
+                            <select style="width: 100%" ui-select2="classSelect"
+                                    ng-model="classSelect" id="classSelect" ng-disabled="isDisabled">
+                                <option data-ng-repeat="class in classes"
+                                        value="{{class.classId}}">{{class.className}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <form role="form" class="formFadeIn"
+          ng-hide="userEditMode == true || userEnrollment == true ">
+        <section class="panel panel-default table-dynamic">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> User's
+                    List</strong>
+                <button type="button" class="btn btn-primary pull-right"
+                        tooltip-placement="left" tooltip="Create New User"
+                        style="margin-top: -3px; height: 25px; margin-right: -8px; width: 60px"
+                        ng-click="addUser()">
+                    <span class="glyphicon glyphicon-plus" style="top: -2px"></span>
+                </button>
+            </div>
+
+            <div class="table-filters">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <form>
+                            <input type="text" placeholder="search"
+                                   class="form-control input-sm" data-ng-model="searchKeywords"
+                                   data-ng-keyup="search()">
+                        </form>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 filter-result-info input-sm">
+                        <!--<span> Showing {{filteredUsers.length}}/{{users.length}}-->
+                        <!--entries </span>-->
+                    </div>
+                </div>
+            </div>
+
+            <table
+                    class="table table-bordered table-striped table-responsive input-sm">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="th">
+                            Id# <span class="glyphicon glyphicon-chevron-up"
+                                      data-ng-click=" order('counter') "
+                                      data-ng-class="{active: row == 'counter'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-counter') "
+                                data-ng-class="{active: row == '-counter'}"></span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th">
+                             Name <span class="glyphicon glyphicon-chevron-up"
+                                            data-ng-click=" order('userName') "
+                                            data-ng-class="{active: row == 'userName'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-userName') "
+                                data-ng-class="{active: row == '-userName'}"></span>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="th">
+                            Email <span class="glyphicon glyphicon-chevron-up"
+                                        data-ng-click=" order('userEmail') "
+                                        data-ng-class="{active: row == 'userEmail'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-userEmail') "
+                                data-ng-class="{active: row == '-userEmail'}"></span>
+                        </div>
+                    </th>
+                    <th>
+							<div class="th">
+								Status(Active/InActive) <span class="glyphicon glyphicon-chevron-up"
+									data-ng-click=" order('active') "
+									data-ng-class="{active: row == 'active'}"></span><span
+									class="glyphicon glyphicon-chevron-down"
+									data-ng-click=" order('-active') "
+									data-ng-class="{active: row == '-active'}"></span>
+							</div>
+						</th>
+                    <th style="width: 60px"></th>
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="user in currentPageUsers">
+                    <!-- <td>{{$index}}</td> -->
+                     <td>{{user.counter}}</td> 
+                    <td>{{user.userName}}</td>
+                    <td>{{user.userEmail}}</td>
+                    <td><i class="glyphicon glyphicon-record" ng-style="{color: (user.active==true) ? 'green' : 'red'}"></i></td>
+                    <td style="padding: 1px;">
+                        <button type="button" class="btn btn-success"
+                                style="height: 25px; width: 60px;" tooltip-placement="top"
+                                tooltip="Modify {{user.userName}}" ng-click="editUser(user)">
+                            <span class="glyphicon glyphicon-pencil" style="top: -2px;"></span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <footer class="table-footer input-sm">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+						<span> Show <select data-ng-model="numPerPage"
+                                            data-ng-options="num for num in numPerPageOpt"
+                                            data-ng-change="onNumPerPageChange()"></select> entries per page
+						</span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm" page="currentPage"
+                                    total-items="filteredUsers.length" max-size="4"
+                                    on-select-page="select(page)" items-per-page="numPerPage"
+                                    rotate="false" boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </form>
+    <form class="form-horizontal formFadeIn" role="form" name="userForm"
+          ng-hide="userEditMode == false" novalidate>
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> User
+                    Creation</strong>
+            </div>
+            <div class="panel-body">
+           <!--  //added -->
+            <div class="form-group">
+                    <label for="firstName" class="col-sm-2 control-label input-sm">First
+                        Name *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="firstName"
+                               placeholder="First Name" ng-model="firstName"
+                               required maxlength="20">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="middleName" class="col-sm-2 control-label input-sm">Middle
+                        Name </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="middleName"
+                               placeholder="Middle Name" ng-model="middleName"
+                               required maxlength="20">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="lastName" class="col-sm-2 control-label input-sm">Last
+                        Name *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="lastName"
+                               placeholder="Last Name" ng-model="lastName"
+                               required maxlength="20">
+                    </div>
+                </div>
+               <!--  <div class="form-group">
+                    <label for="userName" class="col-sm-2 control-label input-sm">User
+                        Name *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="userName"
+                               placeholder="User Name" ng-model="userName"
+                               ng-disabled="isExisting" required maxlength="20">
+                    </div>
+                </div> -->
+                <!-- <div class="form-group">
+                    <label for="userFullName" class="col-sm-2 control-label input-sm">Full
+                        Name *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="userFullName"
+                               placeholder="Full Name" ng-model="userFullName" maxlength="50" required>
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label for="payrollNo" class="col-sm-2 control-label input-sm">PayRoll Number </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" name="payrollNo"  id="payrollNo"
+                               placeholder="PayRoll Number" ng-model="payrollNo" maxlength="20">
+
+                    </div>
+                </div>
+                
+
+                <div class="form-group">
+                    <label for="userPwd" class="col-sm-2 control-label input-sm">Password*</label>
+
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="userPwd"
+                               placeholder="Password" ng-model="userPwd" maxlength="50" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cnfuserPwd" class="col-sm-2 control-label input-sm">Confirm Password</label>
+
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="cnfuserPwd"
+                               placeholder="Confirm Password" ng-model="confirmPwd" maxlength="50">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="groupSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Group *</label>
+
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="groupSelect"
+                                id="groupSelect" required>
+                            <option data-ng-repeat="group in groups"
+                                    ng-selected="{{group.groupId}}" value="{{group.groupId}}">{{group.groupName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail" class="col-sm-2 control-label input-sm">Email </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" name="email" class="form-control input-sm" id="userEmail" maxlength="50"
+                               placeholder="Email" ng-model="userEmail" >
+
+                        <!--<span ng-show="userForm.email.$invalid" class="alert-danger">Please enter valid email.</span>-->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPhone" class="col-sm-2 control-label input-sm">Phone </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" name="userPhone"  id="userPhone"
+                               placeholder="Phone" ng-model="userPhone" maxlength="20">
+
+                        <!--<span ng-show="userForm.userPhone.$invalid" class="alert-danger">Please enter valid phone number.</span>-->
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="active" class="col-sm-2 control-label input-sm">Active</label>
+                    <div class="col-sm-10">
+                        <label> <input type="checkbox" id="active"
+                                       ng-model="active"
+                                       style="margin-top: 10px">
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="branchSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Branch</label>
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="branchSelect"
+                                id="branchSelect">
+                            <option data-ng-repeat="branch in branches"
+                                    ng-selected="{{branch.branchId}}" value="{{branch.branchId}}">{{branch.branchName}}</option>
+                            
+                        </select>
+                    </div>
+                </div>
+            <!--    <div class="col-sm-12 noPadding" style="padding-left: 5px;">
+                    <section class="panel panel-default">
+                        <div class="panel-heading input-sm">
+                            <strong><span class="glyphicon glyphicon-th"></span>
+                                BRANCHES</strong>
+                        </div>
+                        <div class="panel-body"
+                             style="max-height: 400px; overflow-y: auto;">
+
+                            <table
+                                    class="table table-bordered table-striped table-responsive input-sm">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" ng-model="allItemsSelected"
+                                               ng-change="selectAllBranch()"></th>
+                                    <th style="width: 10px" ng-hide="true">
+                                        <div class="th">Id</div>
+                                    </th>
+                                    <th style="width: 260px">
+                                        <div class="th">Branch Name</div>
+                                    </th>
+                                    <th style="width: 260px">
+                                        <div class="th">Branch Code</div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr data-ng-repeat="branch in branches">
+                                    <td><input type="checkbox" ng-model="branch.isChecked"
+                                               ng-checked="branch.isChecked"
+                                               ng-change="selectBranch($index)"></td>
+                                    <td ng-hide="true">{{branch.branchId}}</td>
+                                    <td>{{branch.branchName}}</td>
+                                    <td>{{branch.branchId}}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>-->
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button"  class="btn btn-success input-sm"
+                                style="width: 100px" ng-click="updUser()">
+                            <span class="glyphicon glyphicon-ok"> Save</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelUser()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+
+
+</div>

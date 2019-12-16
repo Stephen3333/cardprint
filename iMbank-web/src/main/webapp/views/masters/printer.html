@@ -1,0 +1,187 @@
+<div class="page" ng-controller="productCtrl">
+    <form role="form" class="formFadeIn"
+          ng-hide="productEditMode == true || productViewMode == true ">
+        <section class="panel panel-default table-dynamic">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> Printer's
+                    List</strong>
+                <button type="button" class="btn btn-primary pull-right"
+                        tooltip-placement="left" tooltip="Add New Printer"
+                        style="margin-top: -3px; height: 25px; margin-right: -8px; width: 60px"
+                        ng-click="addProduct()">
+                    <span class="glyphicon glyphicon-plus" style="top: -2px"></span>
+                </button>
+            </div>
+
+            <div class="table-filters">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <form>
+                            <input type="text" placeholder="search"
+                                   class="form-control input-sm" data-ng-model="searchKeywords"
+                                   data-ng-keyup="search()">
+                        </form>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 filter-result-info input-sm">
+						<!--<span> Showing {{filteredProducts.length}}/{{products.length}}-->
+							<!--entries </span>-->
+                    </div>
+                </div>
+            </div>
+
+            <table
+                    class="table table-bordered table-striped table-responsive input-sm">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="th">
+                            Id# <span class="glyphicon glyphicon-chevron-up"
+                                    data-ng-click=" order('counter') "
+                                    data-ng-class="{active: row == 'counter'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-counter') "
+                                data-ng-class="{active: row == '-counter'}"></span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th">
+                           Serial Number<span class="glyphicon glyphicon-chevron-up"
+                                              data-ng-click=" order('serialNumber') "
+                                              data-ng-class="{active: row == 'serialNumber'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-serialNumber') "
+                                data-ng-class="{active: row == '-serialNumber'}"></span>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="th">
+                            Ip Adress <span class="glyphicon glyphicon-chevron-up"
+                                               data-ng-click=" order('ipAddress') "
+                                               data-ng-class="{active: row == 'ipAddress'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-ipAddress') "
+                                data-ng-class="{active: row == '-ipAddress'}"></span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th">
+                            Branch Name <span class="glyphicon glyphicon-chevron-up"
+                                            data-ng-click=" order('branchName') "
+                                            data-ng-class="{active: row == 'branchName'}"></span><span
+                                class="glyphicon glyphicon-chevron-down"
+                                data-ng-click=" order('-branchName') "
+                                data-ng-class="{active: row == '-branchName'}"></span>
+                        </div>
+                    </th>
+                    <th style="width: 60px"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="product in currentPageProducts">
+                    <td>{{product.counter}}</td>
+                    <!-- <td>{{$index}} -->
+                    <!-- <td>{{product.id}}</td> -->
+                    <td>{{product.serialNumber}}</td>
+                    <td>{{product.ipAddress}}</td>
+                    <td>{{product.branchName}}</td>
+                    <td style="padding: 1px;">
+                        <button type="button" class="btn btn-success"
+                                style="height: 25px; width: 60px;" tooltip-placement="top"
+                                tooltip="Modify {{product.serialNumber}}" ng-click="editProduct(product)">
+                            <span class="glyphicon glyphicon-pencil" style="top: -2px;"></span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <footer class="table-footer input-sm">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+						<span> Show <select data-ng-model="numPerPage"
+                                            data-ng-options="num for num in numPerPageOpt"
+                                            data-ng-change="onNumPerPageChange()"></select> entries per page
+						</span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm" page="currentPage"
+                                    total-items="filteredProducts.length" max-size="4"
+                                    on-select-page="select(page)" items-per-page="numPerPage"
+                                    rotate="false" boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </form>
+    <form class="form-horizontal formFadeIn" role="form" name="productForm" novalidate
+          ng-hide="productEditMode == false">
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> Printer
+                    Creation</strong>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="branchSelect" class="col-sm-2 control-label input-sm"
+                           style="text-align: right;">Select Branch</label>
+                    <div class="col-sm-10">
+                        <select style="width: 100%" ui-select2="" ng-model="branchSelect"
+                                id="branchSelect">
+                            <option data-ng-repeat="branch in branches"
+                                    ng-selected="{{branch.branchId}}" value="{{branch.branchId}}">{{branch.branchName}}</option>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="serialNumber" class="col-sm-2 control-label input-sm">Serial Number
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="serialNumber"
+                               placeholder="Serial Number" ng-model="serialNumber" required maxlength="50" >
+                    </div>
+                    </div>
+                
+
+
+                <div class="form-group">
+                    <label for="ipAddress" class="col-sm-2 control-label input-sm">Ip Address
+                        </label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="ipAddress"
+                               placeholder="Ip Address" ng-model="ipAddress" required maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="col-sm-2 control-label input-sm">Active</label>
+                    <div class="col-sm-10">
+                        <label> <input type="checkbox" id="status"
+                                       ng-model="status"
+                                       style="margin-top: 10px">
+                        </label>
+                    </div>
+                </div>
+
+               </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success input-sm" ng-disabled="productForm.$invalid"
+                                style="width: 100px" ng-click="saveProduct()">
+                            <span class="glyphicon glyphicon-ok"> Save</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelProduct()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>

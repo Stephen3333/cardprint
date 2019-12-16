@@ -1,0 +1,60 @@
+<header class="clearfix">
+	<a href="#/" data-toggle-min-nav class="toggle-min"><i
+		class="fa fa-bars"></i></a>
+
+	<!-- Logo -->
+	<div class="logo">
+		<a href="#/"> <img alt="i&mbank Logo"
+			src="images/I&M_logo white.png" class=""
+			style="width: 120px; height: 50px; margin-top: -8px; background-color:;">
+			<!--  <span>{{main.brand}}</span> --> <span></span>
+		</a>
+	</div>
+	<!--  <div class="logo">
+        <a href="#/" style="width: 50px; margin-right: 20px;">
+            <img alt="eVerify Logo"
+			src="images/everi-logo_in.png" class="img-circle"
+			style="width: 40px; height: 40px; margin-top: -8px; background-color: white;">
+            <span>{{main.brand}}</span>
+            <span>eVerify</span>
+        </a>
+    </div>
+ -->
+	<!-- needs to be put after logo to make it working-->
+	<div class="menu-button" toggle-off-canvas>
+		<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+			class="icon-bar"></span>
+	</div>
+	<div class="top-nav">
+		<div class="form-group col-sm-6 " style="margin-left:10px;">
+			<label for="branchAddress" class="col-sm-4 control-label"
+				style="margin-top: 5px; color: white; font-weight: bolder; font-size: medium;">Registered Branch:</label>
+
+			<label for="branchAddress" class="col-sm-6 control-label"
+				style="margin-top: 5px; color: white; font-weight: bolder; font-size: medium;">{{UsrRghts.branchName}}</label>
+				
+		</div>
+		
+		<ul class="nav-right pull-right list-unstyled">
+			<li class="dropdown text-normal nav-profile"><a
+				href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+					<img src="images/account2.png" alt="" class="img-circle img30_30"
+					style="background-color: white;"> <span class="hidden-xs">
+						<span data-i18n="{{UsrRghts.sessionFullName}}" style="font-weight: bolder;font-size: medium;"></span>
+						</span>
+			</a>
+				<ul class="dropdown-menu with-arrow pull-right">
+					<li><a href="#/user/profile"> <i class="fa fa-user"></i> <span
+							data-i18n="My Profile"></span>
+					</a></li>
+					<li><a href="#/lock"> <i class="fa fa-lock"></i> <span
+							data-i18n="Lock"></span>
+					</a></li>
+					<li><a href="#/login"> <i class="fa fa-sign-out"></i> <span
+							data-i18n="Log Out"></span>
+					</a></li>
+				</ul></li>
+		</ul>
+	</div>
+
+</header>

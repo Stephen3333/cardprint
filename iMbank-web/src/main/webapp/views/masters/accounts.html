@@ -1,0 +1,679 @@
+<div class="page" ng-controller="accountCtrl">
+	<form role="form" class="formFadeIn" ng-hide="supplierListMode == false" >
+	<div ng-show="userClassId == 1">
+		<section class="panel panel-default table-dynamic">
+			<div class="panel-heading input-sm">
+				<strong><span class="glyphicon glyphicon-th"></span>
+					SUPPLIERS</strong>
+
+                <!--<button type="button" class="btn btn-primary pull-right"-->
+                        <!--tooltip-placement="left" tooltip="Create New Supplier"-->
+                        <!--style="margin-top: -3px; height: 25px; margin-right: -8px; width: 60px"-->
+                        <!--ng-click="addSupplier()">-->
+                    <!--<span class="glyphicon glyphicon-plus" style="top: -2px"></span>-->
+                <!--</button>-->
+                <!--<button type="button" class="btn btn-primary pull-right"-->
+                        <!--tooltip-placement="left" tooltip="ExportExcel"-->
+                        <!--style="margin-top: -3px; height: 25px; margin-right: -8px; width: 60px"-->
+                        <!--ng-click="exportAction(pdf)">-->
+                    <!--<span class="glyphicon glyphicon-plus" style="top: -2px"></span>-->
+                <!--</button>-->
+
+			</div>
+
+			<div class="table-filters">
+				<div class="row">
+					<div class="col-sm-4 col-xs-6">
+						<form>
+							<input type="text" placeholder="search"
+								class="form-control input-sm" data-ng-model="searchKeywords"
+								data-ng-keyup="search()">
+						</form>
+					</div>
+					<div class="col-sm-3 col-xs-6 filter-result-info">
+						<!--<span class="input-sm"> Showing-->
+							<!--{{filteredAccounts.length}}/{{accounts.length}} entries </span>-->
+					</div>
+				</div>
+			</div>
+
+			<table
+				class="table table-bordered table-striped table-responsive input-sm export-table" >
+				<thead>
+					<tr>
+						
+						<th>
+								<div class="th">
+								Id# <span class="glyphicon glyphicon-chevron-up"
+									data-ng-click=" order('id') "
+									data-ng-class="{active: row == 'id'}"></span> <span
+									class="glyphicon glyphicon-chevron-down"
+									data-ng-click=" order('-id') "
+									data-ng-class="{active: row == '-id'}"></span>
+							</div>
+						</th>
+
+                        <th>
+                            <div class="th">
+                                Code <span class="glyphicon glyphicon-chevron-up"
+                                                     data-ng-click=" order('supplierCode') "
+                                                     data-ng-class="{active: row == 'supplierCode'}"></span> <span
+                                    class="glyphicon glyphicon-chevron-down"
+                                    data-ng-click=" order('-supplierCode') "
+                                    data-ng-class="{active: row == '-supplierCode'}"></span>
+                            </div>
+                        </th>
+
+
+						<th>
+							<div class="th">
+								ID/Passport No <span class="glyphicon glyphicon-chevron-up"
+									data-ng-click=" order('idNumber') "
+									data-ng-class="{active: row == 'idNumber'}"></span> <span
+									class="glyphicon glyphicon-chevron-down"
+									data-ng-click=" order('-idNumber') "
+									data-ng-class="{active: row == '-idNumber'}"></span>
+							</div>
+						</th>
+
+						<th>
+							<div class="th">
+								Name <span class="glyphicon glyphicon-chevron-up"
+									data-ng-click=" order('firstName') "
+									data-ng-class="{active: row == 'firstName'}"></span> <span
+									class="glyphicon glyphicon-chevron-down"
+									data-ng-click=" order('-firstName') "
+									data-ng-class="{active: row == '-firstName'}"></span>
+							</div>
+						</th>
+                        <th>
+                            <div class="th">
+                                Bio Enroll Status <span class="glyphicon glyphicon-chevron-up"
+                                           data-ng-click=" order('bioId') "
+                                           data-ng-class="{active: row == 'bioId'}"></span> <span
+                                    class="glyphicon glyphicon-chevron-down"
+                                    data-ng-click=" order('-bioId') "
+                                    data-ng-class="{active: row == '-bioId'}"></span>
+                            </div>
+                        </th>
+						<th style="width: 60px">
+                            <div class="th">Edit
+                            </div>
+                        </th>
+						<th style="width: 60px">
+                            <div class="th">
+                                View
+                            </div>
+                        </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="account in currentPageAccounts">
+						<td>{{account.id}}</td>
+
+						<td>{{account.supplierCode}}</td>
+
+                        <td>{{account.customerId}}</td>
+
+						<td>{{account.firstName}} {{account.lastName}} </td>
+
+						<td ng-if="account.bioId == 0"> N </td>
+						<td ng-if="account.bioId != 0"> Y </td>
+
+                        <td style="padding: 1px;">
+                            <button type="button" class="btn btn-success"
+                                    style="height: 25px; width: 60px;" tooltip-placement="top"
+                                    tooltip="Modify {{account.customerId}}" ng-click="editSupplier(account)">
+                                <span class="glyphicon glyphicon-pencil" style="top: -2px;"></span>
+                            </button>
+                        </td>
+
+						<td style="padding: 1px;">
+							<button type="button" class="btn btn-success"
+								style="height: 25px; width: 60px;" tooltip-placement="top"
+								tooltip="View {{account.customerId}}"
+								ng-click="viewAccount(account)">
+								<span class="glyphicon glyphicon-eye-open" style="top: -2px;"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<footer class="table-footer input-sm">
+				<div class="row">
+					<div class="col-md-6 page-num-info">
+						<span> Show <select data-ng-model="numPerPage"
+							data-ng-options="num for num in numPerPageOpt"
+							data-ng-change="onNumPerPageChange()">
+						</select> entries per page
+						</span>
+					</div>
+					<div class="col-md-6 text-right pagination-container">
+						<pagination class="pagination-sm" page="currentPage"
+							total-items="filteredAccounts.length" max-size="4"
+							on-select-page="select(page)" items-per-page="numPerPage"
+							rotate="false" boundary-links="true"></pagination>
+					</div>
+				</div>
+			</footer>
+		</section>
+		</div>
+	</form>
+
+
+    <!--Supplier Details-->
+    <form class="form-horizontal formFadeIn" role="form"
+		ng-hide="supplierViewMode == false">
+		<section class="panel panel-default">
+			<div class="panel-heading input-sm">
+				<strong><span class="glyphicon glyphicon-th input-sm"></span>
+					SUPPLIER DETAILS</strong>
+			</div>
+			<div class="panel-body">
+
+				<div class="form-group col-sm-12 noPadding">
+
+					<div class="col-sm-6 noPadding">
+						<div class="col-sm-4" style="text-align: right;">
+							<label for="inpMemberSurname" class="control-label input-sm">ID/PASSPORT NUMBER</label>
+						</div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control input-sm"
+								id="inpMemberSurname" placeholder="Id Number"
+								ng-model="customerId" readonly>
+						</div>
+					</div>
+					<div class="col-sm-6 noPadding">
+						<div class="col-sm-4" style="text-align: right;">
+							<label for="mobile" class="control-label input-sm">TELEPHONE</label>
+						</div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control input-sm"
+								id="mobile" placeholder="Mobile" ng-model="mobile" readonly>
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group col-sm-12 noPadding">
+					<div class="col-sm-6 noPadding">
+						<div class="col-sm-4" style="text-align: right;">
+							<label for="firstName" class="control-label input-sm">NAME
+								</label>
+						</div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control input-sm"
+								id="firstName" placeholder="Name" ng-model="firstName"
+								readonly>
+						</div>
+					</div>
+
+                    <!--<div class="col-sm-6 noPadding">-->
+                        <!--<div class="col-sm-4" style="text-align: right;">-->
+                            <!--<label for="middleName" class="control-label input-sm">MIDDLE NAME-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--<input type="text" class="form-control input-sm"-->
+                                   <!--id="middleName" placeholder="Middle Name" ng-model="middleName"-->
+                                   <!--readonly>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-sm-6 noPadding">
+                        <div class="col-sm-4" style="text-align: right;">
+                            <label for="suppCode" class="control-label input-sm">SUPPLIER CODE</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control input-sm"
+                                   id="suppCode" placeholder="" ng-model="supplierCode"
+                                   readonly>
+                        </div>
+                    </div>
+				</div>
+
+				<div class="form-group col-sm-12 noPadding">
+
+                    <!--<div class="col-sm-6 noPadding">-->
+                        <!--<div class="col-sm-4" style="text-align: right;">-->
+                            <!--<label for="lastName" class="control-label input-sm">LAST NAME-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--<input type="text" class="form-control input-sm"-->
+                                   <!--id="lastName"-->
+                                   <!--placeholder="Lastname" ng-model="lastName"-->
+                                   <!--readonly>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+					<div class="col-sm-6 noPadding">
+						<div class="col-sm-4" style="text-align: right;">
+							<label for="address" class="control-label input-sm">ADDRESS 1</label>
+						</div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control input-sm"
+								id="address" ng-model="address" readonly>
+
+						</div>
+					</div>
+					<!--<div class="col-sm-6 noPadding">-->
+						<!--<div class="col-sm-4" style="text-align: right;">-->
+							<!--<label for="postalCode"-->
+								<!--class="control-label input-sm">ADDRESS 2</label>-->
+						<!--</div>-->
+						<!--<div class="col-sm-8">-->
+							<!--<input type="text" class="form-control input-sm"-->
+								<!--id="postalCode" placeholder=""-->
+								<!--ng-model="postalCode" readonly>-->
+						<!--</div>-->
+					<!--</div>-->
+                    <div class="col-sm-6 noPadding">
+                        <div class="col-sm-4" style="text-align: right;">
+                            <label for="email" class="control-label input-sm">ADDRESS 2</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control input-sm"
+                                   id="email" placeholder="" ng-model="email"
+                                   readonly>
+                        </div>
+                    </div>
+				</div>
+
+			</div>
+
+			<div class="form-group">
+                <div class="col-lg-12" style="text-align: center">
+                    <a id="rd"
+                        class="btn btn-danger growl-type" ng-click="cancelAccount()">
+                        <i class="icon-warning-sign"></i> Cancel
+                    </a>
+                </div>
+			</div>
+
+		</section>
+	</form>
+
+    <form class="form-horizontal formFadeIn" role="form"
+          ng-hide="supplierEditMode == false" name="supplierForm" novalidate>
+        <section class="panel panel-default">
+            <div class="panel-heading input-sm">
+                <strong><span class="glyphicon glyphicon-th"></span> SUPPLIER
+                    CREATION</strong>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="supplierCode" class="col-sm-2 control-label input-sm">Supplier
+                        Code *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="supplierCode"
+                               placeholder="Enter ID/Passport Number" ng-model="supplierCode"
+                               ng-disabled="isExisting">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="firstName" class="col-sm-2 control-label input-sm">
+                        Name *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="firstName"
+                               placeholder="First Name" ng-model="firstName" required maxlength="100">
+
+                    </div>
+                </div>
+
+
+                <!--<div class="form-group">-->
+                    <!--<label for="middleName" class="col-sm-2 control-label input-sm">Middle-->
+                        <!--Name *</label>-->
+
+                    <!--<div class="col-sm-10">-->
+                        <!--<input type="text" class="form-control input-sm" id="middleName"-->
+                               <!--placeholder="Middle Name" ng-model="middleName"  maxlength="100">-->
+
+                    <!--</div>-->
+                <!--</div>-->
+
+
+                <!--<div class="form-group">-->
+                    <!--<label for="lastName" class="col-sm-2 control-label input-sm">Last Name *</label>-->
+
+                    <!--<div class="col-sm-10">-->
+                        <!--<input type="text" class="form-control input-sm" id="lastName"-->
+                               <!--placeholder="Last Name" ng-model="lastName" required maxlength="50">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-2 control-label input-sm">Telephone *</label>
+
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control input-sm" id="mobile"
+                               placeholder="Mobile" ng-model="mobile" required maxlength="20">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber" class="col-sm-2 control-label input-sm">ID/Passport Number *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="idNumber"
+                               placeholder="ID/Passport No." ng-model="customerId" required maxlength="50" >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="col-sm-2 control-label input-sm">Address 1 *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="address"
+                               placeholder="Postal Address" ng-model="address" required maxlength="50">
+                    </div>
+                </div>
+
+                <!--<div class="form-group">-->
+                    <!--<label for="postalCode" class="col-sm-2 control-label input-sm">Postal Code *</label>-->
+
+                    <!--<div class="col-sm-10">-->
+                        <!--<input type="text" class="form-control input-sm" id="postalCode"-->
+                               <!--placeholder="Postal Code" ng-model="postalCode"  maxlength="50">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label input-sm">Address 2 *</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-sm" id="email"
+                               placeholder="Address 2" ng-model="email" maxlength="100" >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success input-sm"
+                                style="width: 100px" ng-click="saveSupplier()" ng-disabled="supplierForm.$invalid">
+                            <span class="glyphicon glyphicon-ok"> Save</span>
+                        </button>
+                        <button type="button" class="btn btn-warning input-sm"
+                                style="width: 100px" ng-click="cancelAccount()">
+                            <span class="glyphicon glyphicon-remove"> Cancel</span>
+                        </button>
+                        <button type="button" class="btn btn-primary input-sm"
+                                style="width: 100px" ng-click="enrollSupplier()"
+                                ng-hide="bioId != 0">
+                            <span class="glyphicon glyphicon-thumbs-up"> Enroll</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    <!--Enrollment form-->
+    <form class="form-horizontal formFadeIn" role="form"
+          ng-hide="supplierEnrollmentMode == false">
+    <section class="panel panel-default">
+    <div class="panel-heading input-sm">
+        <strong><span class="glyphicon glyphicon-th"></span>Supplier
+            Enrollment</strong>
+    </div>
+    <div class="panel-body">
+    <div class="form-group">
+        <label for="supplierCode" class="col-sm-2 control-label input-sm">Supplier
+            Code</label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" id="supplierCode"
+                   placeholder="Supplier Code" ng-model="supplierCode"
+                   ng-disabled="isExisting">
+        </div>
+    </div>
+        <div class="form-group">
+            <label for="supplierCode" class="col-sm-2 control-label input-sm">Name
+                </label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="supplierName"
+                       placeholder="Supplier Name" ng-model="firstName"
+                       ng-disabled="isExisting">
+            </div>
+        </div>
+    <div class="form-group">
+        <div class="panel-body" data-ng-controller="EnrollCtrl">
+            <div class="widget-content">
+                <div class="col-lg-12">
+                    <div class="form-group col-lg-12">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4">
+                            <div class="row" style="min-height: 320px;">
+                                <img src="images/enroll/enroll.png" class="imgFade" /><img
+                                    src="images/enroll/L0.png" class="fl-L0 imgFade"
+                                    data-next="fl-L1" /><img src="images/enroll/L1.png"
+                                                             class="fl-L1 imgFade" data-next="fl-L2" /><img
+                                    src="images/enroll/L2.png" class="fl-L2 imgFade"
+                                    data-next="fl-L3" /><img src="images/enroll/L3.png"
+                                                             class="fl-L3 imgFade" data-next="fl-L4" /><img
+                                    src="images/enroll/L4.png" class="fl-L4 imgFade"
+                                    data-next="fl-R0" /><img src="images/enroll/R0.png"
+                                                             class="fl-R0 imgFade" data-next="fl-R1" /><img
+                                    src="images/enroll/R1.png" class="fl-R1 imgFade"
+                                    data-next="fl-R2" /><img src="images/enroll/R2.png"
+                                                             class="fl-R2 imgFade" data-next="fl-R3" /><img
+                                    src="images/enroll/R3.png" class="fl-R3 imgFade"
+                                    data-next="fl-R4" /><img src="images/enroll/R4.png"
+                                                             class="fl-R4 imgFade" data-next="x" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4"></div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <table class="table" style="height: 20%;" rowspan ="2" colspan ="2">
+                                        <tbody>
+                                        <tr>
+                                            <td class="cp-L4 imgCol1" data-href='4|L' data-img='L4'
+                                                data-pos='5' data-info='Left Little' capture><a
+                                                    href="javascript:;" class="shortcuts shortcut"> <img
+                                                    src="images/enroll/noImage_1.png">
+                                            </a></td>
+                                            <td class="cp-L3 imgCol1" data-href='3|L' data-img='L3'
+                                                data-pos='4' data-info='Left Ring' capture><a
+                                                    href="javascript:;" class="shortcuts shortcut"> <img
+                                                    src="images/enroll/noImage_1.png">
+                                            </a></td>
+                                            <td class="cp-L2 imgCol1">
+                                                <button type="button" data-href='2|L' data-img='L2'
+                                                        data-pos='3' data-info='Left Middle' capture ng-disabled="statusL2==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+                                                </button>
+
+                                            </td>
+                                            <td class="cp-L1 imgCol1">
+                                                <button type="button" data-href='1|L' data-img='L1'
+                                                        data-pos='2' data-info='Left Index' capture ng-disabled="statusL1==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+                                                </button>
+
+                                            </td>
+
+                                            <td class="cp-L0 imgCol1">
+                                                <button type="button"  data-href='0|L' data-img='L0'
+                                                        data-pos='1' data-info='Left Thumb' capture ng-disabled="statusL0==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div
+                                                        class="qt-L4 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-L3 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-L2 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-L1 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- <div class="qt-L0 progressx progress-striped active ">
+                                                    <div class="progress-bar progress" role="progressbar"
+                                                        aria-valuenow="85" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div> -->
+                                                <div
+                                                        class="qt-L0 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <table class="table" style="border: 0;height: 20%; margin-left: 50px;" rowspan ="2" colspan ="2">
+                                        <tbody>
+                                        <tr>
+                                            <td class="cp-R0 imgCol1" >
+                                                <button type="button" data-href='0|R' data-img='R0' data-pos='1' data-info='Right Thumb' capture ng-disabled="statusR0==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+
+                                                </button>
+
+                                            </td>
+
+                                            <td class="cp-R1 imgCol1">
+                                                <button type="button" data-href='1|R' data-img='R1'
+                                                        data-pos='2' data-info='Right Index' capture ng-disabled="statusR1==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+                                                </button>
+
+                                            </td>
+                                            <td class="cp-R2 imgCol1">
+                                                <button type="button" data-href='2|R' data-img='R2'
+                                                        data-pos='3' data-info='Right Middle' capture ng-disabled="statusR2==true">
+                                                    <a
+                                                            href="javascript:;" class="shortcuts shortcut"> <img
+                                                            src="images/enroll/noImage_1.png">
+                                                    </a>
+                                                </button>
+
+                                            </td>
+
+                                            <td class="cp-R3 imgCol1" data-href='3|R' data-img='R3'
+                                                data-pos='4' data-info='Right Ring' capture><a
+                                                    href="javascript:;" class="shortcuts shortcut"> <img
+                                                    src="images/enroll/noImage_1.png">
+                                            </a></td>
+                                            <td class="cp-R4 imgCol1" data-href='4|R' data-img='R4'
+                                                data-pos='5' data-info='Right Little' capture><a
+                                                    href="javascript:;" class="shortcuts shortcut"> <img
+                                                    src="images/enroll/noImage_1.png">
+                                            </a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div
+                                                        class="qt-R0 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-R1 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-R2 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-R3 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                        class="qt-R4 progressbar-xs progress ng-isolate-scope">
+                                                    <div class="progress-bar"
+                                                         ng-class="type &amp;&amp; 'progress-bar-' + type"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" style="text-align: center">
+                            <a id="rd"
+                               class="btn btn-success" ng-click="onEnrollSupplier()" ng-show="allowEnrollBtn==true">
+                                <i class="glyphicon glyphicon-ok"></i> Enroll
+                            </a>
+                            <a class="btn btn-warning" ng-click="resetDevice()" id="rdb"><i
+                                    class="glyphicon glyphicon-refresh"></i> Reset-Device </a>
+                            <a id="rd"
+                               class="btn btn-danger growl-type" ng-click="cancelMemEnr()">
+                                <i class="glyphicon glyphicon-warning-sign"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </section>
+    </form>
+
+</div>
